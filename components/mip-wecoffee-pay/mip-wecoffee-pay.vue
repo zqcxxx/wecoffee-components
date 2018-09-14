@@ -304,6 +304,9 @@ export default {
         isMipLink: true
       })
     }
+  },
+  prerenderAllowed() {
+    return true
   }
 }
 </script>
