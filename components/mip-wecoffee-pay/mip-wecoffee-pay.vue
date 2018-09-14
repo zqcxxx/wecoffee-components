@@ -28,18 +28,18 @@
       </div>
       <div class="userinf">
         <div class="userinf-i">
-          <span class="userfont">订单号:</span>{{ orderId }}
+          <span class="userfont">订单号</span>: {{ orderId }}
         </div>
         <div
           class="userinf-i"
           style="color:red">
-          <span class="userfont">商品总金额:</span>￥{{ totalPrice }}
+          <span class="userfont">商品总金额</span>: ￥{{ totalPrice }}
         </div>
         <div class="userinf-i">
-          <span class="userfont">收货人:</span>{{ userAddress.name }}
+          <span class="userfont">收货人</span>: {{ userAddress.name }}
         </div>
         <div class="userinf-i">
-          <span class="userfont">电话:</span>{{ userAddress.phoneNumber }}
+          <span class="userfont">电话</span>: {{ userAddress.phoneNumber }}
         </div>
       </div>
       <div
@@ -62,7 +62,7 @@
 <style scoped>
 .wrapper {
   margin: 0 auto;
-  text-align: center;
+  /* text-align: center; */
   height: 100%;
 }
 .orderError {
@@ -81,17 +81,26 @@
   color: #666666;
 }
 .userinf {
-  text-align: left;
   padding: 1em;
   margin-top: 5px;
   border-top: 10px solid rgba(0, 0, 0, 0.08)
 }
-.userinf-i {
-  padding-top: 4vw;
-}
 .userfont {
-  color: #999;
+  text-align: justify;
   padding-right: 5px;
+  width:80px;
+  height:100%;
+  display:inline-block;
+  vertical-align:top;
+  opacity: 0.8;
+  color: darkgray;
+}
+.userfont::after{
+    content:"";
+    display: inline-block;
+    width:100%;
+    overflow:hidden;
+    height:0;
 }
 .footer {
   display: flex;
