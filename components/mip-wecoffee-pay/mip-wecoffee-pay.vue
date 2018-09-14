@@ -19,7 +19,6 @@
               height="2vh"/>
             <span class="coffee-name">
               <div class="coffee-title">{{ item.sku.product.name }}</div>
-              <div class="coffee-options">价格：{{ item.sku.priceCent/100 }}</div>
               <div class="coffee-options">{{ Object.values(JSON.parse(item.extra).spec).join('/').substring(0, 40)}}</div>
             </span>
           </span>
@@ -85,7 +84,7 @@
   text-align: left;
   padding: 1em;
   margin-top: 5px;
-  border-top: 10px solid rgba(0, 0, 0, 0.03)
+  border-top: 10px solid rgba(0, 0, 0, 0.08)
 }
 .userinf-i {
   padding-top: 4vw;
@@ -167,11 +166,14 @@
 }
 .top {
   text-align: left;
-  margin: 5px 0px 5px 5px;
+  margin: 6px 0px 0px 13px;
+  opacity: 0.7;
 }
 </style>
 
 <script>
+import { format } from '../../common/util.js'
+
 export default {
   firstInviewCallback () {
     let self = this
@@ -215,7 +217,7 @@ export default {
       return total
     },
     limTime () {
-      return this.countEle(this.extime)
+      return format(this.extime)
     }
   },
   mounted () {
@@ -226,6 +228,8 @@ export default {
     setTimeout(() => {
       MIP.setData({ payConfig: { sessionId: this.info.sessionId } })
     }, 500)
+    console.log(format(this.extime))
+
   },
   methods: {
     getOrder () {
@@ -277,27 +281,6 @@ export default {
       setTimeout(() => {
         this.updataTime()
       }, 1000)
-    },
-    countEle (time) {
-      let day = Math.floor(time / (3600 * 24))
-      let hour = Math.floor((time - day * 3600 * 24) / 3600)
-      let minutes = Math.floor((time - day * 3600 * 24 - hour * 3600) / 60)
-      minutes < 10 ? (minutes = '0' + minutes) : minutes
-      let second = Math.floor(
-        time - day * 3600 * 24 - hour * 3600 - minutes * 60
-      )
-      second < 10 ? (second = '0' + second) : second
-      let msg = ''
-      if (day !== 0) {
-        msg += day + '天' + hour + '时' + minutes + '分' + second + '秒'
-      } else if (hour !== 0) {
-        msg += hour + '时' + minutes + '分' + second + '秒'
-      } else if (minutes !== 0) {
-        msg += minutes + '分' + second + '秒'
-      } else if (second !== 0) {
-        msg += second + '秒'
-      }
-      return msg
     },
     getOrderList () {
       window.MIP.viewer.open('./orderList.html?r=' + new Date().getTime(), {
