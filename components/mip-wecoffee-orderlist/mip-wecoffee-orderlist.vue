@@ -300,6 +300,7 @@ export default {
         .then(data => {
           if (data && parseInt(data.status, 10) === 0 && data.data.orders.length !== 0) {
             data.data['orders'].map(function (order, idx) {
+              order.createdAt = Number(order.createdAt)
               let now = new Date(order.createdAt)
               let temData = {
                 id: order.id,
