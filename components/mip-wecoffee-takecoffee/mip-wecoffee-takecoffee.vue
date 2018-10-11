@@ -238,10 +238,10 @@
           })
           .then(data => {
             if (data.status !== 0) {
-              self.msg = "非法请求：请返回首页";
+              self.msg = "已取餐，跳转首页";
               self.sta = false;
             } else if (data.data.status !== 50) {
-              self.msg = "非法请求：请返回首页";
+              self.msg = "已取餐，跳转首页";
               self.sta = false;
             } else {
               self.sta = true;
