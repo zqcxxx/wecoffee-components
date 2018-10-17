@@ -171,6 +171,7 @@
     },
     computed: {
       getOrderTime() {
+        this.createdAt = Number(this.createdAt)
         let now = new Date(this.createdAt);
         let timeshow =
           now.getFullYear() +
