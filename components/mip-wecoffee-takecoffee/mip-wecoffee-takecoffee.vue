@@ -25,8 +25,9 @@
       </div>
     </div>
     <div v-if="!sta" class="orderError">
-      <mip-showcase-icon class="abc mip-element mip-layout-container" type="waring"><svg class="rt-svg-icon">
-          <use xlink:href="#waring" /></svg></mip-showcase-icon>
+      <mip-showcase-icon class="abc mip-element mip-layout-container" type="waring">
+        <svg class="rt-svg-icon"><use xlink:href="#waring" /></svg>
+      </mip-showcase-icon>
       <span class="error">{{ msg }}</span>
     </div>
   </div>
@@ -229,7 +230,7 @@
         return null;
       },
       getPayCode() {
-        let self = this;
+        // let self = this;
         fetch("api/take/" + this.getQueryString("token"), {
             method: "get",
             credentials: "include"
@@ -238,14 +239,20 @@
             return res.json();
           })
           .then(data => {
-            if (data.status !== 0) {
-              self.msg = "已取餐，跳转首页";
-              self.sta = false;
-            } else if (data.data.status !== 50) {
-              self.msg = "已取餐，跳转首页";
-              self.sta = false;
+            if(data.status !== 0 || data.data.status !== 50 || data.data.status !== 60) {
+              this.msg = '订单信息错误，即将跳转wecoffee首页'
+              this.sta = false
+              setTimeout( () => {
+                window.MIP.viewer.open("/", { isMipLink: true })
+              }, 2000)
+            } else if ( data.data.status === 60 ){
+              this.msg = '已取餐，即将跳转wecoffee首页'
+              this.sta = false
+              setTimeout( () => {
+                window.MIP.viewer.open("/", { isMipLink: true })
+              }, 2000)
             } else {
-              self.sta = true;
+              this.sta = true
               let {
                 priceCent,
                 id,
@@ -253,14 +260,13 @@
                 takeQcode,
                 createdAt
               } = data.data;
-              self.codeUrl = takeQcode;
-              // self.$ele.querySelect
-              self.createdAt = Number(createdAt);
-              self.priceCent = priceCent;
-              self.items = items;
-              self.id = id;
-              for (let cou of self.items) {
-                self.total += cou.count;
+              this.codeUrl = takeQcode;
+              this.createdAt = Number(createdAt);
+              this.priceCent = priceCent;
+              this.items = items;
+              this.id = id;
+              for (let cou of this.items) {
+                this.total += cou.count;
               }
             }
           })
