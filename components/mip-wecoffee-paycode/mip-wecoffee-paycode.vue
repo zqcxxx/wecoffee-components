@@ -228,39 +228,55 @@ export default {
       return null;
     },
     getPayCode() {
-      let self = this;
-      fetch("api/order/" + this.getQueryString("orderId"), {
-        method: "get",
-        credentials: "include"
-      })
+      fetch("api/take/" + this.getQueryString("token"), {
+          method: "get",
+          credentials: "include"
+        })
         .then(res => {
           return res.json();
         })
         .then(data => {
-          // window.MIP.viewer.open('./orderList.html?r=' + new Date().getTime(), {
-          //   isMipLink: true
-          if (data.status !== 0) {
-            self.msg = "非法请求：请返回首页";
-            self.sta = false;
-          } else if (data.data.status !== 50) {
-            self.msg = "非法请求：请返回首页";
-            self.sta = false;
+          console.log(data)
+          if( data.status !== 0 ) {
+            this.msg = '订单信息错误，即将跳转首页'
+            this.sta = false
+            setTimeout( () => {
+              window.MIP.viewer.open("/", { isMipLink: true })
+            }, 3333)
+          } else if(data.data.status !== 50 && data.data.status !== 60 ) {
+            this.msg = '订单信息错误，即将跳转首页'
+            this.sta = false
+            setTimeout( () => {
+              window.MIP.viewer.open("/", { isMipLink: true })
+            }, 3333)
+          } else if( data.data.status === 60 ){
+            this.msg = '已取餐，即将跳转首页'
+            this.sta = false
+            setTimeout( () => {
+              window.MIP.viewer.open("/", { isMipLink: true })
+            }, 3333)
           } else {
-            self.sta = true;
-            let { priceCent, id, items, takeQcode, createdAt } = data.data;
-            self.codeUrl = takeQcode;
-            self.createdAt = createdAt;
-            self.priceCent = priceCent;
-            self.items = items;
-            self.id = id;
-            for (let cou of self.items) {
-              self.total += cou.count;
+            this.sta = true
+            let {
+              priceCent,
+              id,
+              items,
+              takeQcode,
+              createdAt
+            } = data.data;
+            this.codeUrl = takeQcode;
+            this.createdAt = Number(createdAt);
+            this.priceCent = priceCent;
+            this.items = items;
+            this.id = id;
+            for (let cou of this.items) {
+              this.total += cou.count;
             }
           }
         })
         .catch(e => {
           console.log(e);
-        });
+      });
     },
     prerenderAllowed() {
       return true

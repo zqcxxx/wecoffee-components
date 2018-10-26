@@ -239,18 +239,25 @@
             return res.json();
           })
           .then(data => {
-            if(data.status !== 0 || data.data.status !== 50 || data.data.status !== 60) {
-              this.msg = '订单信息错误，即将跳转wecoffee首页'
+            console.log(data)
+            if( data.status !== 0 ) {
+              this.msg = '订单信息错误，即将跳转首页'
               this.sta = false
               setTimeout( () => {
                 window.MIP.viewer.open("/", { isMipLink: true })
-              }, 2000)
-            } else if ( data.data.status === 60 ){
-              this.msg = '已取餐，即将跳转wecoffee首页'
+              }, 3333)
+            } else if(data.data.status !== 50 && data.data.status !== 60 ) {
+              this.msg = '订单信息错误，即将跳转首页'
               this.sta = false
               setTimeout( () => {
                 window.MIP.viewer.open("/", { isMipLink: true })
-              }, 2000)
+              }, 3333)
+            } else if( data.data.status === 60 ){
+              this.msg = '已取餐，即将跳转首页'
+              this.sta = false
+              setTimeout( () => {
+                window.MIP.viewer.open("/", { isMipLink: true })
+              }, 3333)
             } else {
               this.sta = true
               let {
